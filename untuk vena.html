@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Love Confession · untaian rasa</title>
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Font sederhana namun tetap fancy: Quicksand untuk judul, Poppins untuk teks -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #fdeff2;
+      font-family: 'Poppins', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 12px;
+    }
+
+    .romantic-card {
+      max-width: 900px;
+      width: 100%;
+      background: rgba(255, 250, 245, 0.9);
+      backdrop-filter: blur(4px);
+      border-radius: 40px 40px 30px 30px;
+      box-shadow: 0 20px 40px rgba(230, 180, 180, 0.25);
+      padding: 24px 20px 20px;
+      border: 1px solid #ffdfdf;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Ornamen floating */
+    .ornament {
+      position: absolute;
+      color: rgba(248, 190, 190, 0.3);
+      font-size: 1.8rem;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .ornament-1 { top: 5%; left: 3%; }
+    .ornament-2 { bottom: 8%; right: 2%; }
+    .ornament-3 { top: 20%; right: 8%; font-size: 2.2rem; color: #fcc2c2; }
+    .ornament-4 { bottom: 15%; left: 5%; }
+    .ornament-5 { top: 40%; left: 2%; font-size: 1.2rem; }
+
+    /* Slider */
+    .slider-container {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 28px;
+      margin-bottom: 20px;
+      background: rgba(255, 240, 240, 0.4);
+      box-shadow: inset 0 2px 8px #ffe4e4;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
+    }
+
+    .slide {
+      flex: 0 0 100%;
+      padding: 24px 16px 32px;
+      background: rgba(255, 245, 240, 0.7);
+      border-radius: 28px;
+      min-height: 70vh; /* menyesuaikan tinggi layar */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 2px dashed #ffd9d9;
+      box-shadow: 0 4px 12px #ffe4e1;
+    }
+
+    /* Responsif: tinggi otomatis untuk layar kecil */
+    @media (max-width: 600px) {
+      .slide {
+        min-height: auto;
+        padding: 20px 12px;
+      }
+    }
+
+    /* Judul dengan Quicksand (lebih sederhana) */
+    h1, h2, h3 {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #8b5a5a;
+      text-shadow: 2px 2px 0 #ffe3e3;
+    }
+
+    h1 { font-size: 2.8rem; margin-bottom: 12px; }
+    h2 { font-size: 2.2rem; }
+    h3 { font-size: 2rem; }
+
+    .subtitle {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 300;
+      color: #a06b6b;
+      margin: 16px 0 8px;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      max-width: 450px;
+    }
+
+    /* Gambar placeholder */
+    .image-placeholder {
+      width: 180px;
+      height: 180px;
+      background: #ffe1e1;
+      border-radius: 50% 30% 50% 30% / 40% 50% 40% 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 16px auto;
+      box-shadow: 0 15px 25px #fbb6b6;
+      border: 4px solid white;
+      overflow: hidden; /* agar gambar terpotong sesuai bentuk */
+    }
+    .image-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Gallery grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 20px 0;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .gallery-item {
+      aspect-ratio: 1 / 1;
+      background: #ffecec;
+      border-radius: 20px 8px 20px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 12px #eccaca;
+      border: 2px solid white;
+      overflow: hidden;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Animasi fade in untuk gallery */
+    .slide.active .gallery-item {
+      animation: fadeInUp 0.5s ease forwards;
+      opacity: 0;
+      animation-fill-mode: forwards;
+    }
+    .slide.active .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+    .slide.active .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+    .slide.active .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+    .slide.active .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+    .slide.active .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+    .slide.active .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tombol navigasi */
+    .nav-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
+      background: #f7cfcf;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 600;
+      color: #7a4f4f;
+      box-shadow: 0 6px 0 #d99e9e, 0 8px 16px rgba(210, 140, 140, 0.3);
+      cursor: pointer;
+      transition: all 0.1s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #ffe2e2;
+    }
+
+    .nav-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #d99e9e, 0 5px 12px #f0bcbc;
+    }
+
+    .nav-btn.hidden {
+      opacity: 0.3;
+      pointer-events: none;
+      transform: none;
+      box-shadow: 0 4px 0 #d99e9e;
+    }
+
+    /* Musik player (embed YouTube kecil) */
+    .music-player {
+      margin-top: 24px;
+      text-align: center;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(210, 140, 140, 0.2);
+    }
+    .music-player iframe {
+      width: 100%;
+      height: 80px;
+      border: none;
+      border-radius: 16px;
+    }
+
+    /* Responsif: grid 2 kolom untuk gallery di HP */
+    @media (max-width: 500px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      h1 { font-size: 2.2rem; }
+      h2 { font-size: 1.8rem; }
+      .subtitle { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="romantic-card">
+    <!-- Ornamen dekoratif -->
+    <div class="ornament ornament-1"><i class="fas fa-heart"></i></div>
+    <div class="ornament ornament-2"><i class="fas fa-star"></i></div>
+    <div class="ornament ornament-3"><i class="fas fa-crown"></i></div>
+    <div class="ornament ornament-4"><i class="fas fa-feather"></i></div>
+    <div class="ornament ornament-5"><i class="fas fa-heart"></i></div>
+
+    <!-- SLIDER AREA -->
+    <div class="slider-container">
+      <div class="slides" id="slides">
+        <!-- HALAMAN 1 : INTRO -->
+        <div class="slide" id="slide1">
+          <h1>Hai<br>VENANTYA CAHYANA ALIESTYO PURNIAWAN</h1>
+          <div class="image-placeholder">
+            <img src="https://kytzyriski-oss.github.io/foto1/v1.jpeg" alt="Foto Vena">
+          </div>
+          <h2 style="margin-top: 10px;">kenalin nama aku muhammad rizki kurniawan</h2>
+          <div class="subtitle">manusia biasa yang mengagumi ciptaan tuhan yang indah salah satunya bulan di september</div>
+          <i class="fas fa-heart" style="color: #ffb3b3; font-size: 2rem; margin-top: 16px;"></i>
+        </div>
+
+        <!-- HALAMAN 2 : GALLERY -->
+        <div class="slide" id="slide2">
+          <h2>Salah satu ciptaan tuhan yang indah</h2>
+          <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 8px;">
+            <i class="fas fa-camera"></i> <i class="fas fa-heart"></i> <i class="fas fa-cloud"></i>
+          </div>
+          <div class="gallery-grid">
+            <div class="gallery-item"><img src="https://kytzyriski-oss.github.io/foto1/v3.jpeg" alt="Gallery 1"></div>
+            <div class="gallery-item"><img src="https://kytzyriski-oss.github.io/foto1/v4.jpeg" alt="Gallery 2"></div>
+            <div class="gallery-item"><img src="https://kytzyriski-oss.github.io/foto1/v5.jpeg" alt="Gallery 3"></div>
+            <div class="gallery-item"><img src="https://kytzyriski-oss.github.io/foto1/v6.jpeg" alt="Gallery 4"></div>
+            <div class="gallery-item"><img src="https://kytzyriski-oss.github.io/foto1/v7.jpeg" alt="Gallery 5"></div>
+            <div class="gallery-item"><img src="https://kytzyriski-oss.github.io/foto1/v8.jpeg" alt="Gallery 6"></div>
+          </div>
+          <p class="subtitle" style="font-size: 0.95rem;">indah hanyalah kata, dan kamu adalah "wujudnya"</p>
+        </div>
+
+        <!-- HALAMAN 3 : THE FEELING -->
+        <div class="slide" id="slide3" style="background: #ffefef; background-image: radial-gradient(circle at 20% 30%, #fcc2c2 1px, transparent 1px), radial-gradient(circle at 80% 70%, #fcc2c2 2px, transparent 2px); background-size: 40px 40px, 80px 80px;">
+          <div class="feeling-layout" style="width:100%; text-align: left; padding: 10px;">
+            <h3 style="font-family: 'Quicksand', sans-serif;">tujuan aku aku membuat ini adalah</h3>
+            <div class="subtitle" style="font-weight: 300; max-width: 100%;">
+              aku mau ngomong sesuatu yang udah lama aku simpan, aku suka sama kamu, aku gak mau maksa apa apa, cuma pengen jujur soal perasaan aku, 
+              aku suka cara kamu jadi diri sendiri, kalok kamu ngerasa hal yang sama aku seneng banget. tapi kalok enggak, aku tetep pengen kita tetep saling ngobrol kayak biasa.
+              aku tidak tau sejak kapan aku memiliki perasaan ini lambat laut perasaan ini tiba tiba muncul menghantui aku. diratusan bahkan diribuan manusia disekolah aku hanya ingin mengetahui kamu dimana, kamu sedang apa,entah rasa rindu atau apa akupun bingun serasa ingin tau cerita mu setiap hari,apa saja yang kamu lakukan hari ini, aku ingin mendengar ceritamu dan keluh kesahmu. aku tau banyak yang menyukaimu,aku tau banyak yang mengagumimu. memang kamu seindah itu untuk dikagumi seperti aku mengagumi keindahan ciptaan ciptaan allah. namun cukup melihat mu dari kejauhan aku sudah merasa sangat cukup, melihatmu bahagia sudah membuat ku tenang dan tersenyum bahagia. aku tidak ingin merusak kebahagiaanmu dengan perasaan ini, aku hanya ingin kamu tau bahwa ada seseorang yang diam diam menyimpan rasa untukmu, seseorang yang selalu mendoakanmu, seseorang yang selalu berharap kamu bahagia, seseorang yang selalu ingin melihatmu tersenyum, seseorang yang selalu ingin melihatmu sukses, seseorang yang selalu ingin melihatmu menjadi pribadi yang lebih baik, seseorang yang selalu ingin melihatmu menjadi orang yang lebih baik dari aku. aku tidak tau apakah kamu akan merasakan hal yang sama atau tidak, tapi aku hanya ingin jujur soal perasaan aku, aku suka sama kamu.
+            </div>
+            <div style="margin-top: 30px; display: flex; gap: 20px; justify-content: center;">
+              <i class="fas fa-heart" style="color:#f09b9b; font-size: 2.5rem;"></i>
+              <i class="fas fa-heart" style="color:#f7b2b2; font-size: 2rem;"></i>
+              <i class="fas fa-heart" style="color:#ffc4c4; font-size: 3rem;"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- HALAMAN 4 : THANK YOU -->
+        <div class="slide" id="slide4">
+          <h2 style="font-size: 2.8rem;">🌷 terima kasih</h2>
+          <div class="subtitle" style="font-size: 1.3rem; margin: 10px 0;">
+            sekali lagi aku jatuh cinta kepadamu, aku berterimakasih karena telah mewarnai kehidupanku di smk, terimakasih sudah pernah hadir di hidupku "manusia favoritku"
+          </div>
+          <i class="fas fa-feather" style="font-size: 3rem; color: #dd9b9b; margin: 20px;"></i>
+          <div style="font-family: 'Quicksand', sans-serif; font-size: 1.8rem; color: #b47777;">aku tidak mengharapkan hubungan yang lebih karena aku sendiri masih mengusahakn masa depan ku dan juga mimpiku,mungkin kamu juga sama akan hal itu yang masih mengejar dan berusaha mewujudkan mimpi mu  </div>
+          <div style="font-size: 1.6rem; font-family: 'Quicksand', sans-serif; margin-top: 10px;">— seseorang yang diam-diam menyimpan rasa</div>
+          <div style="display: flex; gap: 10px; margin-top: 30px;">
+            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+          </div>
+        </div>
+      </div> <!-- end slides -->
+    </div> <!-- end slider-container -->
+
+    <!-- TOMBOL NAVIGASI -->
+    <div class="nav-buttons">
+      <button class="nav-btn" id="prevBtn"><i class="fas fa-chevron-left"></i> Kembali</button>
+      <button class="nav-btn" id="nextBtn">Lanjutkan <i class="fas fa-chevron-right"></i></button>
+    </div>
+
+    <!-- MUSIK LATAR (YouTube Embed) -->
+    <div class="music-player">
+      <iframe src="https://kytzyriski-oss.github.io/lagu1/Hindia%20-%20everything%20u%20are.mp3" title="Lagu latar" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <p style="font-size:0.8rem; color:#b99; margin-top:4px;">♫ Putar lagu untuk menemani</p>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const slides = document.querySelectorAll('.slide');
+      const slidesContainer = document.getElementById('slides');
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      let currentIndex = 0;
+      const totalSlides = slides.length;
+
+      function updateSlide(index) {
+        slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+        slides.forEach(slide => slide.classList.remove('active'));
+        slides[index].classList.add('active');
+
+        // Sembunyikan tombol sesuai posisi
+        if (index === totalSlides - 1) {
+          nextBtn.classList.add('hidden');
+        } else {
+          nextBtn.classList.remove('hidden');
+        }
+
+        if (index === 0) {
+          prevBtn.classList.add('hidden');
+        } else {
+          prevBtn.classList.remove('hidden');
+        }
+      }
+
+      prevBtn.addEventListener('click', () => {
+        if (currentIndex > 0) {
+          currentIndex--;
+          updateSlide(currentIndex);
+        }
+      });
+
+      nextBtn.addEventListener('click', () => {
+        if (currentIndex < totalSlides - 1) {
+          currentIndex++;
+          updateSlide(currentIndex);
+        }
+      });
+
+      updateSlide(0); // inisialisasi slide pertama
+    })();
+  </script>
+
+  <!-- Catatan: 
+    - Gambar hanya akan muncul jika file v1.jpeg, v3.jpeg ... v8.jpeg berada di folder yang sama dengan file HTML ini.
+    - Untuk tampil di perangkat lain, pastikan semua file gambar ikut disalin.
+    - Jika ingin gambar online, ganti src dengan URL lengkap (contoh: https://example.com/gambar.jpg).
+  -->
+</body>
+</html>
